@@ -19,16 +19,66 @@ const { NotImplementedError } = require('../extensions/index.js');
  * reverseMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => '!NWAD TA KCATTA'
  * 
  */
-class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+ class VigenereCipheringMachine {
+  constructor(boolValue) {
+    this.boolValue = boolValue;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(message, key) {
+    if (message===undefined || key===undefined) {
+      throw new Error('Incorrect arguments!');
+    }
+    let letters = 'abcdefghijklmnopqrstuvwxyz';
+    let arrKey = [];
+    let arrLetters = [];
+    let curIndex = 0;
+    let k = 0;
+    let j = 0;
+    let n = 0;
+    key.toLowerCase().split('').forEach((a, i, arr) => arrKey.push(letters.indexOf(a)));
+    message.toLowerCase().split('').forEach((a, i, arr) => {
+      if (n > arrKey.length - 1) { k = n; while (k > arrKey.length - 1) { k = k - arrKey.length } }
+      else { k = n; }
+      j = letters.indexOf(a);
+      if (j === -1) { arrLetters.push(a); }
+      else {
+        curIndex = j + arrKey[k];
+        curIndex = curIndex % letters.length;
+        arrLetters.push(letters[curIndex]); n++
+      }
+    });
+    return this.boolValue === false ? arrLetters = arrLetters.reverse().join('').toLocaleUpperCase() : arrLetters.join('').toLocaleUpperCase()
+   
+  }
+
+  decrypt(message, key) {
+    if (message===undefined || key===undefined) {
+      throw new Error('Incorrect arguments!');
+    }
+    this.message = message
+    let letters = 'abcdefghijklmnopqrstuvwxyz';
+    let arrKey = [];
+    let arrLetters = [];
+    let curIndex = 0;
+    let k = 0;
+    let j = 0;
+    let n = 0;
+    key.toLowerCase().split('').forEach((a,i,arr)=> arrKey.push(letters.indexOf(a)));
+    message.toLowerCase().split('').forEach((a,i,arr)=> {
+      if (n>arrKey.length-1) {k=n; while (k>arrKey.length-1) {k = k-arrKey.length}}
+      else {k=n;}
+      j = letters.indexOf(a);
+      if (j === -1) {arrLetters.push(a);}
+      else {
+        curIndex = j - arrKey[k];
+        curIndex <0 ? curIndex = letters.length - Math.abs(curIndex) : curIndex;
+        arrLetters.push(letters[curIndex]);n++
+      }
+    });
+    return this.boolValue === false ? arrLetters = arrLetters.reverse().join('').toLocaleUpperCase() : arrLetters.join('').toLocaleUpperCase()
   }
 }
+
+
 
 module.exports = {
   VigenereCipheringMachine
